@@ -1,0 +1,64 @@
+// Core
+
+@import "soliapp/custom/functions";
+@import "soliapp/custom/variables";
+@import "soliapp/custom/mixins";
+
+// bootstrap (4.6.0) components
+
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/code";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/button-group";
+@import "~bootstrap/scss/input-group";
+@import "~bootstrap/scss/custom-forms";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/breadcrumb";
+@import "~bootstrap/scss/pagination";
+@import "~bootstrap/scss/badge";
+@import "~bootstrap/scss/jumbotron";
+@import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/progress";
+@import "~bootstrap/scss/media";
+@import "~bootstrap/scss/list-group";
+@import "~bootstrap/scss/close";
+@import "~bootstrap/scss/modal";
+@import "~bootstrap/scss/tooltip";
+@import "~bootstrap/scss/popover";
+@import "~bootstrap/scss/carousel";
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/print";
+
+// Argon utilities and components
+
+@import "soliapp/custom/reboot";
+@import "soliapp/custom/utilities";
+@import "soliapp/custom/components";
+
+// Vendor (Plugins)
+
+@import "soliapp/custom/vendors";
+
+// Docs components
+
+@import "soliapp/docs/variables";
+@import "soliapp/docs/nav";
+@import "soliapp/docs/clipboard-js";
+@import "soliapp/docs/component-examples";
+@import "soliapp/docs/prism";
+@import "soliapp/docs/content";
+@import "soliapp/docs/sidebar";
+@import "soliapp/docs/footer";
+
+// React Differences
+@import "react/react-differences";
