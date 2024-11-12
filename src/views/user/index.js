@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {
     Button,
-    Media,
     Container,
     Row,
     Form,
@@ -19,12 +18,11 @@ import useUser from 'hooks/useUser';
 import useBranchOffice from 'hooks/useBranchOffice';
 import AddUser from './add';
 import EditUser from './edit';
-import { usePermissions } from 'context/permission';
+import RestrictionUser from './restriction';
 
 const Users = () => {
-    const { getuser, getusers, getpermissions, getroles, storeuser, storeuserpermissions, updateuser } = useUser();
+    const { getuser, getusers, getpermissions, getroles, storeuser, storeuserpermissions,storerestriction, updateuser,updaterestriction } = useUser();
     const { getbranchoffices } = useBranchOffice();
-    const { permissions } = usePermissions();
 
     const [usersdata, setUsersdata] = useState([]);
     const [roles, setRoles] = useState([]);
@@ -34,6 +32,9 @@ const Users = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [windows, setWindows] = useState([]);
     const [isOpenModalView, setIsOpenModalView] = useState(true);
+    const [modal, setModal] = useState(false);
+    const [userselected, setUserselected] = useState(null);
+    const [restrictiondata, setRestrictiondata] = useState([]);
 
     const formatuser = (data) => {
         let usrs = [];
@@ -48,14 +49,19 @@ const Users = () => {
                 name: value.name,
                 user: value.user,
                 permissions: value.permissions,
-                options: <FormGroup className="mb-0">
+                options: (<FormGroup className="mb-0">
                     <Button onClick={() => { edituser(value.id) }}>
                         <i className="fas fa-pencil" />
                     </Button>
+                    {value.role_name == "Analista de credito junior" ? (
+                        <Button onClick={() => { opencreditrestriction(value.id,value.restrictions)}}>
+                            <i className="fas fa-money-bill-transfer" />
+                        </Button>
+                    ) : null}
                     <Button onClick={() => { }}>
                         <i className="fas fa-trash" />
                     </Button>
-                </FormGroup>
+                </FormGroup>)
             });
         });
         setUsersdata(usrs);
@@ -96,13 +102,33 @@ const Users = () => {
             })
         });
     }
+    const opencreditrestriction=(id,restriction)=>{
+        
+        setUserselected(id);
+        setRestrictiondata(restriction);
+        setModal(true);
+    }
+    const storerestrictions=(values)=>{
+        storerestriction(values,()=>{
+            reloadinfo();
+            setModal(false);
+        });
+    }
+    const updaterestrictions=(values)=>{
+        updaterestriction(values.id,values,()=>{
+            reloadinfo();
+            setModal(false);
+        });
+    }
+
+    const toggle = () => setModal(!modal);
+
     useEffect(() => {
         getroles(setRoles);
         getusers(formatuser);
         getpermissions(setPermissionsdata);
         getbranchoffices(setBranch);
-
-    }, [])
+    }, []);
 
     return (
         <Fragment>
@@ -165,7 +191,7 @@ const Users = () => {
                             </WinBox>)
                         })
                     }
-
+                    <RestrictionUser data={restrictiondata} store={storerestrictions} update={updaterestrictions} iduser={userselected} modal={modal} toggle={toggle}/>
                 </Fragment>
             )}
         </Fragment>

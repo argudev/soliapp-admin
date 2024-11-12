@@ -147,6 +147,20 @@ const useUser = () => {
             notification("Error", "Ha ocurrido un error al agregar los permisos del ususario");
         });
     }
+    const storerestriction = (form, callback) => {
+        axios.post('user/restriction/store', form).then((res) => {
+            let getdata = res.data;
+            if (getdata.success) {
+                let data = getdata.data;
+                notification("Success", "Restriccion agregada");
+                callback(data);
+            } else {
+                notification("Error", "Ha ocurrido un error al agregar la restriccion de credito, intente nuevamente.");
+            }
+        }).catch((err) => {
+            notification("Error", "Ha ocurrido un error al agregar la restriccion de credito, intente nuevamente.");
+        });
+    }
     const updateuser = (id, form, callback) => {
         axios.put(`user/update/${id}`, form).then((res) => {
             let getdata = res.data;
@@ -161,14 +175,28 @@ const useUser = () => {
             notification("Error", "Ha ocurrido un error al agregar al usuario, intente nuevamente.");
         });
     }
-    const deleteocasign=(id,callback)=>{
-        axios.delete(`supervisor/destroy/${id}`).then((res)=>{
-            let data=res.data;
+    const updaterestriction = (id,form, callback) => {
+        axios.put(`user/restriction/update/${id}`, form).then((res) => {
+            let getdata = res.data;
+            if (getdata.success) {
+                let data = getdata.data;
+                notification("Success", "Restriccion actualizada");
+                callback(data);
+            } else {
+                notification("Error", "Ha ocurrido un error al actualizar la restriccion de credito, intente nuevamente.");
+            }
+        }).catch((err) => {
+            notification("Error", "Ha ocurrido un error al actualizar la restriccion de credito, intente nuevamente.");
+        });
+    }
+    const deleteocasign = (id, callback) => {
+        axios.delete(`supervisor/destroy/${id}`).then((res) => {
+            let data = res.data;
             if (data.success) {
                 notification("Success", "Se ha quitado la asignacion del oficial");
                 callback(data);
             }
-        }).catch((err)=>{
+        }).catch((err) => {
             notification("Error", "Ha ocurrido un error al agregar quitar la asignacion del oficial, intente nuevamente.");
         });
     }
@@ -183,7 +211,9 @@ const useUser = () => {
         storeuser,
         storeuserpermissions,
         storeuserasign,
+        storerestriction,
         updateuser,
+        updaterestriction,
         deleteocasign,
     }
 }
