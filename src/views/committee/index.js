@@ -13,11 +13,9 @@ import Committeeview from './committee';
 import { customStyles } from 'variables/table';
 import useBroadcast from 'hooks/useBroadcast';
 
-
-
 const Committee = () => {
     const { connectWebSocket_updates } = useBroadcast();
-    const { getcases, getpaymentypes, getsinriesgo, getcredithistory, getpdf,storesinriesgo,storecredithistory } = useCase();
+    const { getcases, getpaymentypes, getsinriesgo, getcredithistory, getpdf, storesinriesgo, storecredithistory } = useCase();
     const [committeedata, setCommitteedata] = useState([]);
     const [windows, setWindows] = useState([]);
     const [isOpenModalView, setIsOpenModalView] = useState(true);
@@ -39,8 +37,12 @@ const Committee = () => {
     //Format cases
     const formatcases = (data) => {
         let casesdata = [];
+        let typeuser = localStorage.getItem('user_level');
+        let getrestriction = localStorage.getItem('user_credit_restriction');
+        let restriction = getrestriction ? JSON.parse(getrestriction) : [];
         data.map((value) => {
-            casesdata.push({
+            let creditamount = value.credit_capacity.length >= 1 ? value.credit_capacity[0].amount : 0;
+            let datatoadd = {
                 id: value.id,
                 type: value.type === 'New' ? 'Nuevo' : 'Re-Prestamo',
                 customer: value.customer.name,
@@ -64,7 +66,16 @@ const Committee = () => {
                 options: <Button onClick={() => openWindow(value)}>
                     <i className="fas fa-eye" />
                 </Button>
-            });
+            };
+            if (typeuser != 'Analista de credito junior') {
+                casesdata.push(datatoadd);
+            } else {
+                if (value.type === 'New' && creditamount > 0 && creditamount <= restriction.New) {
+                    casesdata.push(datatoadd);
+                } else if (value.type === 'Re-lend' && creditamount > 0 && creditamount <= restriction.Relend) {
+                    casesdata.push(datatoadd);
+                } else { }
+            }
         });
         setCommitteedata(casesdata);
 
@@ -77,8 +88,8 @@ const Committee = () => {
         reloadcases();
         getpaymentypes((values) => {
             setPaymentyTypesdata(values);
-        });        
-        connectWebSocket_updates('cases-to-committee','CaseToCommittee',reloadcases);
+        });
+        connectWebSocket_updates('cases-to-committee', 'CaseToCommittee', reloadcases);
     }, []);
 
     return (

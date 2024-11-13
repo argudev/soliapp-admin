@@ -47,7 +47,6 @@ const Approved = () => {
         });
     }
 
-
     //Format cases
     const formatcases = (data) => {
         let casesdata = [];

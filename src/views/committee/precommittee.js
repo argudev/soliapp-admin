@@ -29,7 +29,6 @@ const Precommitteeview = ({ data, users, sinriesgo, credithistory, printcase, re
     const [currentimagelist, setCurrentimagelist] = useState([]);
     const [openImageViewer, setOpenImageViewer] = useState(false);
     const [imageViewerindex, setImageViewerindex] = useState(0);
-    console.log(data);
 
     const imgviewersetindex = (index, imglist) => {
         setCurrentimagelist(imglist);

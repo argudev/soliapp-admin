@@ -18,13 +18,13 @@ import DataTable from 'react-data-table-component';
 import { occolumns } from 'variables/columns';
 import { customStyles } from 'variables/table';
 
-const OficialAsignModal = ({ data, superv, useroc,store,deleteoc, modal, toggle }) => {
+const OficialAsignModal = ({ data, superv, useroc, store, deleteoc, modal, toggle }) => {
     const [ocdata, setOcdata] = useState([]);
     const [filterText, setFilterText] = useState('');
     const [filteredData, setFilteredData] = useState([]);
     const [form, setForm] = useState({
         user: '',
-        sub_supervisor:''
+        sub_supervisor: ''
     });
 
     const formatoficial = (dat) => {
@@ -34,7 +34,7 @@ const OficialAsignModal = ({ data, superv, useroc,store,deleteoc, modal, toggle 
                 id: value.id,
                 name: value.name,
                 options: <FormGroup className="mb-0">
-                    <Button onClick={() => {deleteoc(value.id)}}>
+                    <Button onClick={() => { deleteoc(value.id) }}>
                         <i className="fas fa-trash" />
                     </Button>
                 </FormGroup>
@@ -54,14 +54,14 @@ const OficialAsignModal = ({ data, superv, useroc,store,deleteoc, modal, toggle 
     const handleSearch = (event) => {
         const searchValue = event.target.value.toLowerCase();
         setFilterText(searchValue);
-        const filteredItems = data.filter((item) =>
+        const filteredItems = ocdata.filter((item) =>
             item.name.toLowerCase().includes(searchValue)
         );
         setFilteredData(filteredItems);
     };
-    const asignoc=()=>{
-        if (form.user !='') {
-            form.sub_supervisor=superv;
+    const asignoc = () => {
+        if (form.user != '') {
+            form.sub_supervisor = superv;
             store(form);
         }
     }
@@ -109,7 +109,7 @@ const OficialAsignModal = ({ data, superv, useroc,store,deleteoc, modal, toggle 
                     </Col>
                     <Col lg="4">
                         <FormGroup className="mb-1">
-                            <Button onClick={() => { asignoc()}}>
+                            <Button onClick={() => { asignoc() }}>
                                 <i className="fas fa-plus" />
                                 Asignar
                             </Button>

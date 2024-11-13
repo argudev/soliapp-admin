@@ -14,7 +14,12 @@ export const PermissionsProvider = ({ children }) => {
         setPermissions(newPermissions);
     };
     const updateUserData = (newuser) => {
-
+        if (newuser.restrictions.length >= 1) {
+            localStorage.setItem('user_credit_restriction', JSON.stringify(newuser.restrictions[0].restrictions));
+        } else {
+            localStorage.setItem('user_credit_restriction', null);
+        }
+        localStorage.setItem('user_level', newuser.role_name);
         setUserdata(newuser);
     };
     const getpermissions = () => {
@@ -25,7 +30,6 @@ export const PermissionsProvider = ({ children }) => {
                     if (getdata.success) {
                         let data = getdata.data;
                         let permissions = [];
-                        console.log(data);
                         data.map((value) => {
                             permissions.push({ "module": value.permission.module.name, "permission": value.permission.name })
                         });
@@ -54,12 +58,12 @@ export const PermissionsProvider = ({ children }) => {
     const getuserdata = () => {
         if (localStorage.getItem('soliapp_Access_key')) {
             axios.post(`user/get/me`).then((res) => {
-                    let getdata = res.data;
-                    if (getdata) {
-                        let data = getdata.data;
-                        updateUserData(data);
-                    }
-                })
+                let getdata = res.data;
+                if (getdata) {
+                    let data = getdata.data;
+                    updateUserData(data);
+                }
+            })
                 .catch((err) => {
                     console.log(err);
                 });
@@ -72,7 +76,7 @@ export const PermissionsProvider = ({ children }) => {
 
 
     return (
-        <PermissionsContext.Provider value={{ permissions,userdata, updatePermissions }}>
+        <PermissionsContext.Provider value={{ permissions, userdata, updatePermissions }}>
             {children}
         </PermissionsContext.Provider>
     );
