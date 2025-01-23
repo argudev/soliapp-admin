@@ -12,14 +12,14 @@ import {
     Input,
 } from "reactstrap";
 
-const MapFilter=({branch,users,getuserbranch,gettracks})=> {
+const MapFilter = ({ branch, users, getuserbranch, gettracks }) => {
     const [form, setForm] = useState({
-        branch:'',
-        user:'',
-        date:'',
+        branch: '',
+        user: '',
+        date: '',
     });
     const handleInputChange = (event) => {
-        if (event.target.name ==='branch') {
+        if (event.target.name === 'branch') {
             getuserbranch(event.target.value)
         }
         setForm({
@@ -45,7 +45,7 @@ const MapFilter=({branch,users,getuserbranch,gettracks})=> {
                             <Form>
                                 <div className="pl-lg-4">
                                     <Row>
-                                        <Col lg="6">
+                                        <Col lg="3">
                                             <FormGroup>
                                                 <label
                                                     className="form-control-label"
@@ -72,7 +72,7 @@ const MapFilter=({branch,users,getuserbranch,gettracks})=> {
                                                 </Input>
                                             </FormGroup>
                                         </Col>
-                                        <Col lg="6">
+                                        <Col lg="3">
                                             <FormGroup>
                                                 <label
                                                     className="form-control-label"
@@ -99,31 +99,28 @@ const MapFilter=({branch,users,getuserbranch,gettracks})=> {
                                                 </Input>
                                             </FormGroup>
                                         </Col>
-                                        <Col lg="12">
-                                                <FormGroup>
-                                                    <label
-                                                        className="form-control-label"
-                                                        htmlFor="input-date"
-                                                    >
-                                                        Fecha
-                                                    </label>
-                                                    <Input
-                                                        className="form-control-alternative"
-                                                        id="input-date"
-                                                        name="date"
-                                                        placeholder="Fecha"
-                                                        type="date"
-                                                        value={form.date}
-                                                        onChange={handleInputChange}
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-                                    </Row>
-                                </div>
-                                <hr className="my-4" />
-                                <div className="pl-lg-4">
-                                    <Row>
-                                        <Col lg="2"><FormGroup><Button color="success" onClick={() => gettracks(form.user,form.date)}>Filtrar</Button></FormGroup></Col>
+                                        <Col lg="3">
+                                            <FormGroup>
+                                                <label
+                                                    className="form-control-label"
+                                                    htmlFor="input-date"
+                                                >
+                                                    Fecha
+                                                </label>
+                                                <Input
+                                                    className="form-control-alternative"
+                                                    id="input-date"
+                                                    name="date"
+                                                    placeholder="Fecha"
+                                                    type="date"
+                                                    value={form.date}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </FormGroup>
+                                        </Col>
+                                        <Col lg="3">
+                                        <FormGroup><Button color="success" onClick={() => gettracks(form.user, form.date)}>Filtrar</Button></FormGroup>
+                                        </Col>
                                     </Row>
                                 </div>
                             </Form>

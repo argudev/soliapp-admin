@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState,useEffect } from 'react';
 import {
     Container,
     Row,
@@ -24,17 +24,53 @@ import Analytics from './tabs/analytics';
 import Preevaluation from './tabs/preevaluation';
 
 
-const Precommitteeview = ({ data, users, sinriesgo, credithistory, printcase, reloadinfo,storesin,storehist }) => {
+const Precommitteeview = ({ data, users, sinriesgo, credithistory, printcase, reloadinfo, storesin, storehist }) => {
     const [activeTab, setActiveTab] = useState('1');
     const [currentimagelist, setCurrentimagelist] = useState([]);
     const [openImageViewer, setOpenImageViewer] = useState(false);
     const [imageViewerindex, setImageViewerindex] = useState(0);
+    const [validatedata, setValidatedata] = useState({
+        budget: false,
+        business: false,
+        warranty: false,
+        analytics: false,
+        evaluation: false,
+    })
 
     const imgviewersetindex = (index, imglist) => {
         setCurrentimagelist(imglist);
         setImageViewerindex(index);
         setOpenImageViewer(true);
     }
+
+    const validate = () => {
+        let budgets = data.budgets ? data.budgets : [],
+            business = data.customer_business ? data.customer_business : [],
+            warranties = data.warranty ? data.warranty : [],
+            analytics = data.warranty ? data.warranty : [],
+            evaluation = data.credit_capacity ? data.credit_capacity : [];
+
+        setValidatedata({
+            budget: budgets.length >= 1 ? true : false,
+            business: business.length >= 1 ? true : false,
+            warranty: warranties.length >= 1 ? true : false,
+            analytics: analytics.length >= 1 ? true : false,
+            evaluation: evaluation.length >= 1 ? true : false,
+        });
+        console.log({
+            budget: budgets.length >= 1 ? true : false,
+            business: business.length >= 1 ? true : false,
+            warranty: warranties.length >= 1 ? true : false,
+            analytics: analytics.length >= 1 ? true : false,
+            evaluation: evaluation.length >= 1 ? true : false,
+        });
+        
+    }
+
+    useEffect(() => {
+        validate();
+    }, [data])
+    
     return (
         <Fragment>
             <div
@@ -141,7 +177,7 @@ const Precommitteeview = ({ data, users, sinriesgo, credithistory, printcase, re
                                 {data && <Analytics payment={data.payment_capacity[0]} debts={data.customer_debts} business={data.customer_business} businessexpenses={data.customer_business_expenses} budgets={data.budgets} warranty={data.warranty} />}
                             </TabPane>
                             <TabPane tabId="9">
-                                {data && <Preevaluation idcase={data.id} request_promotor={data.user} users={users} credit={data.credit_capacity[0]} storesin={storesin} storehist={storehist} reloadinfo={() => reloadinfo()} />}
+                                {data && <Preevaluation idcase={data.id} request_promotor={data.user} users={users} credit={data.credit_capacity[0]} validations={validatedata} storesin={storesin} storehist={storehist} reloadinfo={() => reloadinfo()} />}
                             </TabPane>
                         </TabContent>
                     </Col>

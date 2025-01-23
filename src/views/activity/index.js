@@ -12,76 +12,64 @@ import {
 } from "reactstrap";
 import DataTable from 'react-data-table-component';
 import { customStyles } from 'variables/table';
-import { supervisorcolumns } from 'variables/columns';
+import { userscolumns } from 'variables/columns';
 import useUser from 'hooks/useUser';
-import OficialAsignModal from './list';
 
-const Supervisor = () => {
-    const { getsupervisors,getoc,storeuserasign,deleteocasign } = useUser();
-    const [supervisorsdata, setSupervisorsdata] = useState([]);
-    const [useroc, setUseroc] = useState([]);
-    const [supervSelected, setSupervSelected] = useState(null);
-    const [oficials, setOficials] = useState([]);
-    const [modal, setModal] = useState(false);
+const Activities = () => {
+    const { getusers } = useUser();
+
+    const [usersdata, setUsersdata] = useState([]);
     const [filterText, setFilterText] = useState('');
     const [filteredData, setFilteredData] = useState([]);
+    const [modal, setModal] = useState(false);
 
     const formatuser = (data) => {
         let usrs = [];
-        
         data.map((value) => {
             usrs.push({
                 id: value.id,
+                role: value.role,
                 role_name: value.role_name,
+                business_id: value.business_id,
+                branchoffice: value.branchoffice,
                 branchoffice_name: value.branchoffice_name,
                 name: value.name,
-                options: <FormGroup className="mb-0">
-                    <Button onClick={() => {openmodal(value.id,value.ocs)}}>
-                        <i className="fas fa-list" />
+                user: value.user,
+                permissions: value.permissions,
+                options: (<FormGroup className="mb-0">
+                    <Button onClick={() => {  }}>
+                        <i className="fas fa-pencil" />
                     </Button>
-                </FormGroup>
+                    {value.role_name == "Analista de credito junior" ? (
+                        <Button onClick={() => { }}>
+                            <i className="fas fa-money-bill-transfer" />
+                        </Button>
+                    ) : null}
+                    <Button onClick={() => { }}>
+                        <i className="fas fa-trash" />
+                    </Button>
+                </FormGroup>)
             });
         });
-        setSupervisorsdata(usrs);
+        setUsersdata(usrs);
         setFilteredData(usrs);
     }
     const handleSearch = (event) => {
         const searchValue = event.target.value.toLowerCase();
         setFilterText(searchValue);
-        const filteredItems = supervisorsdata.filter((item) =>
+        const filteredItems = usersdata.filter((item) =>
             item.name.toLowerCase().includes(searchValue)
         );
         setFilteredData(filteredItems);
     };
-
-    const openmodal=(id,ocs)=>{
-        console.log(id,ocs);
-        setSupervSelected(id);
-        setOficials(ocs);
-        setModal(true)
-    }
-
     const reloadinfo = () => {
-        getsupervisors(formatuser);
-        
+        getusers(formatuser);
     }
+
     const toggle = () => setModal(!modal);
-    const asignoficial=(data)=>{
-        storeuserasign(data,(dat)=>{
-            reloadinfo();
-            setModal(false);
-        });
-    }
-    const deloficialasig=(id)=>{
-        deleteocasign(id,()=>{
-            reloadinfo();
-            setModal(false);
-        });
-    }
+
     useEffect(() => {
-        getsupervisors(formatuser);
-        getoc(setUseroc);
-    }, [])
+    }, []);
 
     return (
         <Fragment>
@@ -89,9 +77,9 @@ const Supervisor = () => {
             <Container className="mt--7" fluid>
                 <Row>
                     <DataTable
-                        columns={supervisorcolumns}
+                        columns={userscolumns}
                         data={filteredData}
-                        title={"Supervisores"}
+                        title={"Usuarios"}
                         customStyles={customStyles}
                         pagination
                         subHeader
@@ -106,15 +94,18 @@ const Supervisor = () => {
                                         </InputGroupAddon>
                                         <Input placeholder="Buscar..." type="text" value={filterText} onChange={handleSearch} />
                                     </InputGroup>
+                                    <Button onClick={() => {}}>
+                                        <i className="fas fa-plus" />
+                                        Agregar
+                                    </Button>
                                 </FormGroup>
                             </Form>
                         }
                     />
                 </Row>
             </Container>
-            <OficialAsignModal data={oficials} store={asignoficial} deleteoc={deloficialasig} superv={supervSelected} useroc={useroc} modal={modal} toggle={toggle} />
         </Fragment>
     )
 }
 
-export default Supervisor
+export default Activities

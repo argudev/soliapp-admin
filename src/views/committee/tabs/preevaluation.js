@@ -11,10 +11,12 @@ import {
     Col,
 } from "reactstrap";
 import useCase from 'hooks/useCase';
+import useNotification from 'hooks/useNotification';
 
 
-const Preevaluation = ({ idcase, request_promotor,users, credit,storesin,storehist, reloadinfo }) => {
+const Preevaluation = ({ idcase,validations, request_promotor,users, credit,storesin,storehist, reloadinfo }) => {
     const { approvedtoverifiying, deniedcase } = useCase();
+    const {notification}=useNotification();
     const [form, setForm] = useState({
         id: '',
         user: '',
@@ -47,6 +49,21 @@ const Preevaluation = ({ idcase, request_promotor,users, credit,storesin,storehi
         });
     }
     const approved = () => {
+        const validationMessages = {
+            budget: "El caso no cuenta con datos de presupuesto familiar",
+            business: "El caso no cuenta con datos del negocio",
+            warranty: "El caso no cuenta con datos de las garantías",
+            analytics: "El caso no cuenta con datos del análisis",
+            evaluation: "El caso no cuenta con datos de evaluación",
+        };
+        
+        for (const [key, message] of Object.entries(validationMessages)) {
+            if (!validations[key]) {
+                notification("Warning", message);
+                return;
+            }
+        }
+        
         if (form.user && form.comment) {
             approvedtoverifiying(idcase, form, () => {
                 reloadinfo();

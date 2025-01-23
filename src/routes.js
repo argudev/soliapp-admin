@@ -9,7 +9,7 @@ import Approved from "views/committee/approved";
 import Denied from "views/committee/denied";
 import Users from "views/user";
 import Supervisor from "views/supervisor";
-import Monitoring from "views/monitoring";
+import Monitoring from "views/monitoring/newindex";
 import ToWrite from "views/committee/indextowrite";
 import UploadGallery from "views/gallery";
 import { usePermissions } from "context/permission";
