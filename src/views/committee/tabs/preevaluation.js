@@ -13,22 +13,21 @@ import {
 import useCase from 'hooks/useCase';
 import useNotification from 'hooks/useNotification';
 
-
-const Preevaluation = ({ idcase,validations, request_promotor,users, credit,storesin,storehist, reloadinfo }) => {
+const Preevaluation = ({ idcase, validations, request_promotor, users, credit, storesin, storehist, reloadinfo }) => {
     const { approvedtoverifiying, deniedcase } = useCase();
-    const {notification}=useNotification();
+    const { notification } = useNotification();
     const [form, setForm] = useState({
         id: '',
         user: '',
         comment: ''
     });
     const [filesdata, setFilesdata] = useState({
-        sinriesgo:[],
-        history:[],
+        sinriesgo: [],
+        history: [],
     })
     const [fileselected, setFileselected] = useState({
-        sinriesgo:[],
-        history:[],
+        sinriesgo: [],
+        history: [],
     });
 
     const handleInputChange = (event) => {
@@ -56,14 +55,14 @@ const Preevaluation = ({ idcase,validations, request_promotor,users, credit,stor
             analytics: "El caso no cuenta con datos del análisis",
             evaluation: "El caso no cuenta con datos de evaluación",
         };
-        
+
         for (const [key, message] of Object.entries(validationMessages)) {
             if (!validations[key]) {
                 notification("Warning", message);
                 return;
             }
         }
-        
+
         if (form.user && form.comment) {
             approvedtoverifiying(idcase, form, () => {
                 reloadinfo();
@@ -77,13 +76,13 @@ const Preevaluation = ({ idcase,validations, request_promotor,users, credit,stor
             });
         }
     }
+
     useEffect(() => {
         setForm({
-            id: credit?credit.id:'',
+            id: credit ? credit.id : '',
             user: '',
             comment: ''
         });
-        
     }, []);
 
     return (
@@ -136,7 +135,7 @@ const Preevaluation = ({ idcase,validations, request_promotor,users, credit,stor
                                         placeholder="Monto"
                                         type="text"
                                         readOnly
-                                        value={credit?credit.amount:0}
+                                        value={credit ? credit.amount : 0}
                                     />
                                 </FormGroup>
                             </Col>
@@ -155,7 +154,7 @@ const Preevaluation = ({ idcase,validations, request_promotor,users, credit,stor
                                         placeholder="Tasa de Interés"
                                         type="text"
                                         readOnly
-                                        value={credit?credit.interest_rate:0}
+                                        value={credit ? credit.interest_rate : 0}
                                     />
                                 </FormGroup>
                             </Col>
@@ -174,7 +173,7 @@ const Preevaluation = ({ idcase,validations, request_promotor,users, credit,stor
                                         placeholder="Plazo (Meses)"
                                         type="text"
                                         readOnly
-                                        value={credit?credit.deadline:0}
+                                        value={credit ? credit.deadline : 0}
                                     />
                                 </FormGroup>
                             </Col>
@@ -193,7 +192,7 @@ const Preevaluation = ({ idcase,validations, request_promotor,users, credit,stor
                                         placeholder="Frecuencia"
                                         type="text"
                                         readOnly
-                                        value={credit?credit.payment_type_name:""}
+                                        value={credit ? credit.payment_type_name : ""}
                                     />
                                 </FormGroup>
                             </Col>
@@ -212,7 +211,7 @@ const Preevaluation = ({ idcase,validations, request_promotor,users, credit,stor
                                         placeholder="Cuota"
                                         type="text"
                                         readOnly
-                                        value={credit?credit.quota:0}
+                                        value={credit ? credit.quota : 0}
                                     />
                                 </FormGroup>
                             </Col>
@@ -309,7 +308,7 @@ const Preevaluation = ({ idcase,validations, request_promotor,users, credit,stor
                             </Col>
                             <Col lg="6">
                                 <FormGroup>
-                                    <Button onClick={() => storesin(idcase,fileselected.sinriesgo)}>Subir</Button>
+                                    <Button onClick={() => storesin(idcase, fileselected.sinriesgo)}>Subir</Button>
                                 </FormGroup>
                             </Col>
                             <Col lg="6">
@@ -334,7 +333,7 @@ const Preevaluation = ({ idcase,validations, request_promotor,users, credit,stor
                             </Col>
                             <Col lg="6">
                                 <FormGroup>
-                                    <Button onClick={() => storehist(idcase,fileselected.history)}>Subir</Button>
+                                    <Button onClick={() => storehist(idcase, fileselected.history)}>Subir</Button>
                                 </FormGroup>
                             </Col>
                         </Row>

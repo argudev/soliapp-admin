@@ -74,7 +74,6 @@ const Precommittee = () => {
         if (userdata.role_name == 'Supervisor de Sucursal') {
 
             if (userdata.branchoffice_name == "Casa matriz") {
-                console.log('Funciona', userdata.branchoffice_name);
 
                 const filteredItems = casesdata.filter((item) =>
                     item.department.toLowerCase().includes('managua')

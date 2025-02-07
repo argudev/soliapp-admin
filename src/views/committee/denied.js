@@ -11,10 +11,12 @@ import DataTable from 'react-data-table-component';
 import WinBox from 'react-winbox';
 import ViewCase from './viewcase';
 import { customStyles } from 'variables/table';
+import { usePermissions } from "context/permission";
 
 
 const Denied = () => {
     const { getcases, getcase, getsinriesgo, getcredithistory, getpdf } = useCase();
+    const { userdata } = usePermissions();
     const [committeedata, setCommitteedata] = useState([]);
     const [windows, setWindows] = useState([]);
     const [isOpenModalView, setIsOpenModalView] = useState(true);
@@ -42,6 +44,7 @@ const Denied = () => {
     //Format cases
     const formatcases = (data) => {
         let casesdata = [];
+        let dataset = [];
         data.map((value) => {
             casesdata.push({
                 id: value.id,
@@ -69,8 +72,30 @@ const Denied = () => {
                 </Button>
             });
         });
-        setCommitteedata(casesdata);
+        if (userdata.role_name == 'Supervisor de Sucursal' || userdata.role_name == 'Operaciones') {
 
+            if (userdata.branchoffice_name == "Casa matriz") {
+
+                const filteredItems = casesdata.filter((item) =>
+                    item.department.toLowerCase().includes('managua')
+                );
+                dataset = filteredItems;
+
+            } else {
+
+                const filteredItems = casesdata.filter((item) =>
+                    item.department.toLowerCase().includes('masaya')
+                );
+                dataset = filteredItems;
+
+            }
+            setCommitteedata(dataset);
+
+        } else {
+            dataset = casesdata;
+            setCommitteedata(dataset);
+
+        }
     }
     const reloadcases = () => {
         getcases('cases/denied', formatcases);

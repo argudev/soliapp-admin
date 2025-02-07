@@ -18,9 +18,11 @@ import WinBox from 'react-winbox';
 import ViewCase from './viewcase';
 import { customStyles } from 'variables/table';
 import useBroadcast from 'hooks/useBroadcast';
+import { usePermissions } from "context/permission";
 
 const Approved = () => {
-    const {disconnectWebsocket}=useBroadcast()
+    const { disconnectWebsocket } = useBroadcast()
+    const { userdata } = usePermissions();
     const { getcases, getcase, getsinriesgo, getcredithistory, getpdf } = useCase();
     const [committeedata, setCommitteedata] = useState([]);
     const [windows, setWindows] = useState([]);
@@ -50,7 +52,8 @@ const Approved = () => {
     //Format cases
     const formatcases = (data) => {
         let casesdata = [];
-        
+        let dataset = [];
+
         data.map((value) => {
             casesdata.push({
                 id: value.id,
@@ -78,14 +81,39 @@ const Approved = () => {
                 </Button>
             });
         });
-        setCommitteedata(casesdata);
-        setFilteredData(casesdata);
+        if (userdata.role_name == 'Supervisor de Sucursal' || userdata.role_name == 'Operaciones') {
+
+            if (userdata.branchoffice_name == "Casa matriz") {
+
+                const filteredItems = casesdata.filter((item) =>
+                    item.department.toLowerCase().includes('managua')
+                );
+                dataset = filteredItems;
+
+            } else {
+
+                const filteredItems = casesdata.filter((item) =>
+                    item.department.toLowerCase().includes('masaya')
+                );
+                dataset = filteredItems;
+
+            }
+            setCommitteedata(dataset);
+            setFilteredData(dataset);
+
+        } else {
+            dataset = casesdata;
+            setCommitteedata(dataset);
+            setFilteredData(dataset);
+
+        }
+
 
     }
     const handleSearch = (event) => {
         const searchValue = event.target.value.toLowerCase();
         setFilterText(searchValue);
-        const filteredItems = committeedata.filter((item) => 
+        const filteredItems = committeedata.filter((item) =>
             item.customer.toLowerCase().includes(searchValue) ||
             item.doc.toLowerCase().includes(searchValue) ||
             item.datecase.toLowerCase().includes(searchValue) ||
