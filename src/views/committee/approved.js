@@ -91,12 +91,10 @@ const Approved = () => {
                 dataset = filteredItems;
 
             } else {
-
                 const filteredItems = casesdata.filter((item) =>
-                    item.department.toLowerCase().includes('masaya')
+                    item.department.toLowerCase().includes('masaya') || item.department.toLowerCase().includes('carazo')
                 );
                 dataset = filteredItems;
-
             }
             setCommitteedata(dataset);
             setFilteredData(dataset);

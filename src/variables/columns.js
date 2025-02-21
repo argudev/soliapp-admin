@@ -342,3 +342,15 @@ export const occolumns =[
         selector: (row) => row.options
     }
 ];
+export const clientscasecolumns =[
+    {
+        name: 'Nombre',
+        selector: (row) => row.name,
+        sortable: true,
+    },
+    {
+        name: ' ',
+        selector: (row) => row.options,
+        sortable: false,
+    },
+];
