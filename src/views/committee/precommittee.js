@@ -47,7 +47,7 @@ const Precommitteeview = ({ data, users, sinriesgo, credithistory, printcase, re
         let budgets = data.budgets ? data.budgets : [],
             business = data.customer_business ? data.customer_business : [],
             warranties = data.warranty ? data.warranty : [],
-            analytics = data.warranty ? data.warranty : [],
+            analytics = data.payment_capacity ? data.payment_capacity : [],
             evaluation = data.credit_capacity ? data.credit_capacity : [];
 
         setValidatedata({
@@ -57,13 +57,7 @@ const Precommitteeview = ({ data, users, sinriesgo, credithistory, printcase, re
             analytics: analytics.length >= 1 ? true : false,
             evaluation: evaluation.length >= 1 ? true : false,
         });
-        console.log({
-            budget: budgets.length >= 1 ? true : false,
-            business: business.length >= 1 ? true : false,
-            warranty: warranties.length >= 1 ? true : false,
-            analytics: analytics.length >= 1 ? true : false,
-            evaluation: evaluation.length >= 1 ? true : false,
-        });
+        console.log(data);
         
     }
 
