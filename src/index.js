@@ -7,6 +7,7 @@ import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/soliapp.scss";
 import 'sweetalert2/dist/sweetalert2.min.css';
+import 'leaflet/dist/leaflet.css';
 
 import App from "app";
 
