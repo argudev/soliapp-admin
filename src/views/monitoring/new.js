@@ -21,25 +21,24 @@ const Monitoring = () => {
     const [users, setUsers] = useState([]);
     const [userMarkers, setUserMarkers] = useState([]);
     const [trayectoryUser, setTrayectoryUser] = useState([]);
-    const [addressCache, setAddressCache] = useState({}); // Cache para direcciones
+    const [addressCache, setAddressCache] = useState({});
 
-    // Función para obtener el nombre de la calle usando Nominatim (OSM)
     const getStreetName = async (lat, lng) => {
         const cacheKey = `${lat},${lng}`;
-        if (addressCache[cacheKey]) return addressCache[cacheKey]; // Usar caché si existe
+        if (addressCache[cacheKey]) return addressCache[cacheKey];
 
         try {
             const response = await fetch(
                 `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
             );
             const data = await response.json();
-            
+
             let address = "Dirección no disponible";
             if (data.address) {
-                address = data.address.road || 
-                          data.address.pedestrian || 
-                          data.address.footway || 
-                          "Calle no identificada";
+                address = data.address.road ||
+                    data.address.pedestrian ||
+                    data.address.footway ||
+                    "Calle no identificada";
             }
 
             setAddressCache(prev => ({ ...prev, [cacheKey]: address })); // Guardar en caché
@@ -49,8 +48,22 @@ const Monitoring = () => {
             return "Error al cargar la dirección";
         }
     };
-
-    // Componente para mostrar la dirección (evita llamadas redundantes)
+    const fetchRouteFromOSRM = async (coordinates) => {
+        try {
+            const coordsString = coordinates.map(coord => `${coord[1]},${coord[0]}`).join(';');
+            const response = await fetch(
+                `https://router.project-osrm.org/route/v1/driving/${coordsString}?overview=full&geometries=geojson`
+            );
+            const data = await response.json();
+            if (data.routes && data.routes[0]) {
+                return data.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+            }
+            return [];
+        } catch (error) {
+            console.error("Error al obtener la ruta:", error);
+            return [];
+        }
+    };
     const AddressDisplay = ({ lat, lng }) => {
         const [address, setAddress] = useState("Cargando dirección...");
 
@@ -65,7 +78,6 @@ const Monitoring = () => {
         return <span>{address}</span>;
     };
 
-    // Resto de tus funciones (getTrack, updateuserfilter, etc.)
     const getTrack = async (usr, date) => {
         getwaypointsuser(usr, date, async (data) => {
             let posidata = [];
@@ -81,8 +93,9 @@ const Monitoring = () => {
                 trayectory.push([Number(value.latitude), Number(value.longitude)]);
             });
 
+            const roadRoute = await fetchRouteFromOSRM(trayectory);
             setUserMarkers(posidata);
-            setTrayectoryUser(trayectory);
+            setTrayectoryUser(roadRoute.length > 0 ? roadRoute : trayectory);
         });
     };
 
@@ -129,9 +142,9 @@ const Monitoring = () => {
                                 </Marker>
                             ))}
                             {trayectoryUser && trayectoryUser.length > 0 && (
-                                <Polyline 
-                                    positions={trayectoryUser} 
-                                    color="red" 
+                                <Polyline
+                                    positions={trayectoryUser}
+                                    color="red"
                                     weight={4}
                                     opacity={0.7}
                                 />
