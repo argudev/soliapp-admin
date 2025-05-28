@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import L from 'leaflet';
+import { FullscreenControl } from 'react-leaflet-fullscreen';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
@@ -16,8 +17,8 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-
-const LeafletMap = ({center=[12.1219451,-86.2642218], zoom=13, children}) => {
+const LeafletMap = ({ center = [12.1219451, -86.2642218], zoom = 13, children }) => {
+    
     return (
         <MapContainer
             center={center}
@@ -28,6 +29,7 @@ const LeafletMap = ({center=[12.1219451,-86.2642218], zoom=13, children}) => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='Grufinsa'
             />
+            <FullscreenControl />
             {children}
         </MapContainer>
     );
