@@ -349,6 +349,11 @@ export const clientscasecolumns =[
         sortable: true,
     },
     {
+        name: 'Documento',
+        selector: (row) => row.doc,
+        sortable: true,
+    },
+    {
         name: ' ',
         selector: (row) => row.options,
         sortable: false,

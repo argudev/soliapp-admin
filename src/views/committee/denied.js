@@ -3,6 +3,12 @@ import {
     Button,
     Media,
     Container,
+    Form,
+    FormGroup,
+    InputGroupAddon,
+    InputGroupText,
+    Input,
+    InputGroup,
     Row,
 } from "reactstrap";
 import useCase from 'hooks/useCase';
@@ -20,6 +26,8 @@ const Denied = () => {
     const [committeedata, setCommitteedata] = useState([]);
     const [windows, setWindows] = useState([]);
     const [isOpenModalView, setIsOpenModalView] = useState(true);
+    const [filterText, setFilterText] = useState('');
+    const [filteredData, setFilteredData] = useState([]);
 
     // Close window
     const handleClose = (id) => {
@@ -90,13 +98,26 @@ const Denied = () => {
 
             }
             setCommitteedata(dataset);
+            setFilteredData(dataset);
 
         } else {
             dataset = casesdata;
             setCommitteedata(dataset);
+            setFilteredData(dataset);
 
         }
     }
+    const handleSearch = (event) => {
+        const searchValue = event.target.value.toLowerCase();
+        setFilterText(searchValue);
+        const filteredItems = committeedata.filter((item) =>
+            item.customer.toLowerCase().includes(searchValue) ||
+            item.doc.toLowerCase().includes(searchValue) ||
+            item.datecommitte.toLowerCase().includes(searchValue) ||
+            item.date.toLowerCase().includes(searchValue)
+        );
+        setFilteredData(filteredItems);
+    };
     const reloadcases = () => {
         getcases('cases/denied', formatcases);
     }
@@ -111,10 +132,25 @@ const Denied = () => {
                 <Row>
                     <DataTable
                         columns={committeecolumns}
-                        data={committeedata}
+                        data={filteredData}
                         title={"Casos Denegados"}
                         customStyles={customStyles}
                         pagination
+                        subHeader
+                        subHeaderComponent={
+                            <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+                                <FormGroup className="mb-0">
+                                    <InputGroup className="input-group-alternative">
+                                        <InputGroupAddon addonType="prepend">
+                                            <InputGroupText>
+                                                <i className="fas fa-search" />
+                                            </InputGroupText>
+                                        </InputGroupAddon>
+                                        <Input placeholder="Buscar..." type="text" value={filterText} onChange={handleSearch} />
+                                    </InputGroup>
+                                </FormGroup>
+                            </Form>
+                        }
                     />
                 </Row>
             </Container>

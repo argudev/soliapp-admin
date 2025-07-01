@@ -40,9 +40,21 @@ const Verifiying = () => {
         let casesdata = [];
         
         data.map((value) => {
+        let type = null;
+        if(value.type === 'New'){
+            type = 'Nuevo';
+        }else if(value.type === 'Re-lend'){
+            type = 'Re-Prestamo';
+        }else if(value.type === 'Restructure'){
+            type = 'Restructuracion';
+        }else if (value.type === 'Consumo') {
+            type = 'Consumo';
+        }else {
+            type = '';
+        }
             casesdata.push({
                 id: value.id,
-                type: value.type === 'New' ? 'Nuevo' : 'Re-Prestamo',
+                type: type,
                 customer: value.customer.name,
                 department: value.customer.department_name,
                 doc: value.customer.document,

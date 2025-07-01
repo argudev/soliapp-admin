@@ -13,6 +13,8 @@ import Monitoring from "views/monitoring/new";
 import ToWrite from "views/committee/indextowrite";
 import UploadGallery from "views/gallery";
 import { usePermissions } from "context/permission";
+import UpdateData from "views/updates";
+import Dashboard from "views/dashboard/Dashboard";
 
 const MyRoutes = () => {
   const { permissions } = usePermissions();
@@ -143,7 +145,7 @@ const MyRoutes = () => {
 
     });
   }
-  fnroutes();
+  fnroutes(); 
   return {
     routes
   }
